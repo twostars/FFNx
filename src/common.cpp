@@ -1196,20 +1196,23 @@ void common_flip(struct game_obj *game_object)
 	}
 
 	// Enable XInput if a compatible gamepad is detected while playing the game, otherwise continue with native DInput
-	if (!xinput_connected && gamepad.CheckConnection())
+	if (enable_xinput)
 	{
-		if (trace_all || trace_gamepad) ffnx_trace("XInput controller: connected.\n");
+		if (!xinput_connected && gamepad.CheckConnection())
+		{
+			if (trace_all || trace_gamepad) ffnx_trace("XInput controller: connected.\n");
 
-		xinput_connected = true;
+			xinput_connected = true;
 
-		// Release any previous DirectInput attached controller, if any
-		joystick.Clean();
-	}
-	else if (xinput_connected && !gamepad.CheckConnection())
-	{
-		if (trace_all || trace_gamepad) ffnx_trace("XInput controller: disconnected.\n");
+			// Release any previous DirectInput attached controller, if any
+			joystick.Clean();
+		}
+		else if (xinput_connected && !gamepad.CheckConnection())
+		{
+			if (trace_all || trace_gamepad) ffnx_trace("XInput controller: disconnected.\n");
 
-		xinput_connected = false;
+			xinput_connected = false;
+		}
 	}
 
 	frame_counter++;

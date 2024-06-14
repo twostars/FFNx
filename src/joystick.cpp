@@ -67,7 +67,7 @@ BOOL CALLBACK Joystick::staticSetGameControllerProperties(LPCDIDEVICEOBJECTINSTA
 
 BOOL Joystick::enumerateGameControllers(LPCDIDEVICEINSTANCE devInst)
 {
-  if(isXInputDevice(&devInst->guidProduct))
+  if (enable_xinput && isXInputDevice(&devInst->guidProduct))
     return DIENUM_CONTINUE;
 
 	// enumerate devices
@@ -107,6 +107,8 @@ bool Joystick::CheckConnection()
 {
   if (dev == nullptr)
   {
+    DWORD cooperativeLevel;
+
     // initialize the main DirectInput 8 device
     if (FAILED(DirectInput8Create(gameHinstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void **)&dev, NULL)))
       return false;
@@ -147,7 +149,13 @@ bool Joystick::CheckConnection()
     }
 
     // set cooperative level
-    if (FAILED(gameController->SetCooperativeLevel(gameHwnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE)))
+    cooperativeLevel = DISCL_EXCLUSIVE;
+    if (enable_background_input)
+      cooperativeLevel |= DISCL_BACKGROUND;
+    else
+      cooperativeLevel |= DISCL_FOREGROUND;
+
+    if (FAILED(gameController->SetCooperativeLevel(gameHwnd, cooperativeLevel)))
       return false;
 
     // set data format

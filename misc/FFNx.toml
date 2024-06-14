@@ -369,6 +369,19 @@ external_movie_audio_ext = "ogg"
 # Controller Options
 ###########################
 
+#[BACKGROUND INPUT]
+# This flag will enable background controller input to allow input while the game window is not currently active.
+# XInput usually supports this by default without needing to enable this, but not on all controllers (e.g. Xbox 360).
+# As such, this will disable XInput support and use DirectInput instead, so as to consistently handle such cases.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~
+enable_background_input = false
+
+#[XINPUT]
+# This flag will enable XInput support.
+# When disabled, DirectInput will be used instead.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~
+enable_xinput = true
+
 #[ANALOGUE CONTROLS]
 # FF7: This flag will enable analogue joystick input for controlling the player in fields and the camera in battles.
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -121,6 +121,8 @@ std::vector<std::string> disable_animated_textures_on_field;
 long ff7_fps_limiter;
 bool ff7_footsteps;
 bool ff7_field_center;
+bool enable_background_input;
+bool enable_xinput;
 bool enable_analogue_controls;
 bool enable_inverted_vertical_camera_controls;
 bool enable_inverted_horizontal_camera_controls;
@@ -280,6 +282,8 @@ void read_cfg()
 	ff7_fps_limiter = config["ff7_fps_limiter"].value_or(FF7_LIMITER_DEFAULT);
 	ff7_footsteps = config["ff7_footsteps"].value_or(false);
 	ff7_field_center = config["ff7_field_center"].value_or(true);
+	enable_background_input = config["enable_background_input"].value_or(false);
+	enable_xinput = config["enable_xinput"].value_or(true);
 	enable_analogue_controls = config["enable_analogue_controls"].value_or(false);
 	enable_inverted_vertical_camera_controls = config["enable_inverted_vertical_camera_controls"].value_or(false);
 	enable_inverted_horizontal_camera_controls = config["enable_inverted_horizontal_camera_controls"].value_or(false);
@@ -315,6 +319,10 @@ void read_cfg()
 	if (external_voice_music_fade_volume < 0) external_voice_music_fade_volume = 0;
 	if (external_voice_music_fade_volume > 100) external_voice_music_fade_volume = 100;
 
+	// Background input requires DirectInput, so we should turn XInput off
+	// XInput usually supports this without needing to toggle, but since it doesn't always (e.g. Xbox 360 controllers)
+	// we should use DirectInput instead for consistency.
+	if (enable_background_input) enable_xinput = false;
 
 	// #############
 	// SAFE DEFAULTS
